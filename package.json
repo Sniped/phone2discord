@@ -1,0 +1,16 @@
+{
+  "name": "phone2discord",
+  "version": "1.0.0",
+  "description": "Text a number and that text shows up in a Discord channel",
+  "main": "phone.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Facto",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^11.4.2",
+    "express": "^4.16.4",
+    "twilio": "^3.29.1"
+  }
+}
