@@ -7,29 +7,44 @@ const bodyParser = require('body-parser');
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
 
-const dclient = new Discord.Client();
+const dbclient = new Discord.Client();
+const dkclient = new Discord.Client();
 const vclient = new Voice(config.sid, config.authtoken);
-dclient.login(config.token);
+dbclient.login(config.btoken);
+dkclient.login(config.ktoken);
 
-dclient.on('ready', () => {
-    console.log(`Discord bot is ready! USERNAME: ${dclient.user.tag}`);
+dbclient.on('ready', () => {
+    console.log(`Brock bot is ready! USERNAME: ${dbclient.user.tag}`);
 });
 
-dclient.on('message', msg => {
+dkclient.on('ready', () => {
+    console.log(`Kenneth bot is ready! USERNAME: ${dkclient.user.tag}`);
+});
+
+dbclient.on('message', msg => {
     if (msg.content.startsWith('ping')) {
         if (msg.author.bot) return;
         msg.channel.send('ping!');
-    } else if (msg.channel.id == config.brockchannel) {
-        vclient.messages.create({ body: `${msg.author.tag} BOT: ${msg.author.bot}\n\n${msg.content}`, from: config.sendernumber, to: config.brocknumber });
+    } else if (msg.channel.id == config.channel) {
+        vclient.messages.create({ body: `${msg.author.tag} BOT: ${msg.author.bot}\n\n${msg.content}`, from: config.bsendernumber, to: config.brocknumber });
+    }
+});
+
+dkclient.on('message', msg => {
+    if (msg.content.startsWith('ping')) {
+        if (msg.author.bot) return;
+        msg.channel.send('ping!');
+    } else if (msg.channel.id == config.channel) {
+        vclient.messages.create({ body: `${msg.author.tag} BOT: ${msg.author.bot}\n\n${msg.content}`, from: config.ksendernumber, to: config.kennethnumber });
     }
 });
 
 app.post('/sms/brock', (req, res) => {
-    dclient.channels.get(config.brockchannel).send(req.body.Body);
+    dbclient.channels.get(config.channel).send(req.body.Body);
 });
 
 app.post('/sms/kenneth', (req, res) => {
-    dclient.channels.get(config.kennethchannel).send(req.body.Body);
+    dkclient.channels.get(config.channel).send(req.body.Body);
 });
 
 app.listen(4768, () => {
