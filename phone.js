@@ -24,8 +24,12 @@ dclient.on('message', msg => {
     }
 });
 
-app.post('/sms', (req, res) => {
+app.post('/sms/brock', (req, res) => {
     dclient.channels.get(config.brockchannel).send(req.body.Body);
+});
+
+app.post('/sms/kenneth', (req, res) => {
+    dclient.channels.get(config.kennethchannel).send(req.body.Body);
 });
 
 app.listen(4768, () => {
