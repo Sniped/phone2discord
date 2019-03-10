@@ -39,6 +39,10 @@ dkclient.on('message', msg => {
     }
 });
 
+app.get('/', (req, res) => {
+    res.send('who tf r u lol');
+});
+
 app.post('/sms/brock', (req, res) => {
     dbclient.channels.get(config.channel).send(req.body.Body);
 });
