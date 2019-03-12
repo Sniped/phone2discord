@@ -3,6 +3,7 @@ const Voice = require('twilio');
 const config = require('./config.json');
 const express = require('express');
 const bodyParser = require('body-parser');
+const MessagingResponse = require('twilio').twiml.MessagingResponse;
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -76,7 +77,24 @@ app.post('/sms/kenneth', (req, res) => {
 });
 
 app.post('/sms/test', (req, res) => {
-    dtclient.channels.get(config.channel).send(req.body.Body);
+    const content = req.body.Body.split(' ');
+    const twiml = new MessagingResponse();
+
+    if (content.startsWith('!msg')) {
+        if (!content[1]) return twiml.message('You must include someone you\'d like to message.');
+        const user = dtclient.users.find(user => user.tag === content[1]);
+        if (!user) return twiml.message('The user you\'re trying to send a message to is invalid.');
+        const message = content.slice(2).join(' ');
+        if (!message) return twiml.message('You must include a message to send this user.');
+        try {
+            user.send(message);
+        } catch (err) {
+            twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
+        }
+    } else dtclient.channels.get(config.channel).send(req.body.Body);
+
+    res.writeHead(200, { 'Content-Type': 'text/xml' });
+    res.end(twiml.toString());
 });
 
 app.listen(4768, () => {
