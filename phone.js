@@ -4,6 +4,7 @@ const config = require('./config.json');
 const express = require('express');
 const bodyParser = require('body-parser');
 const MessagingResponse = require('twilio').twiml.MessagingResponse;
+const twiml = new MessagingResponse();
 
 const app = express();
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -78,7 +79,6 @@ app.post('/sms/kenneth', (req, res) => {
 
 app.post('/sms/test', (req, res) => {
     const content = req.body.Body.split(' ');
-    const twiml = new MessagingResponse();
 
     if (content[0] == '!msg') {
         if (!content[1]) return twiml.message('You must include someone you\'d like to message.');
