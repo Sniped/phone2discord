@@ -78,10 +78,9 @@ app.post('/sms/kenneth', (req, res) => {
 
 app.post('/sms/test', (req, res) => {
     const content = req.body.Body.split(' ');
-    console.log(content);
     const twiml = new MessagingResponse();
 
-    if (content.startsWith('!msg')) {
+    if (content[0] == '!msg') {
         if (!content[1]) return twiml.message('You must include someone you\'d like to message.');
         const user = dtclient.users.find(user => user.tag === content[1]);
         if (!user) return twiml.message('The user you\'re trying to send a message to is invalid.');
