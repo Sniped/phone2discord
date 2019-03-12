@@ -78,6 +78,7 @@ app.post('/sms/kenneth', (req, res) => {
 
 app.post('/sms/test', (req, res) => {
     const content = req.body.Body.split(' ');
+    console.log(content);
     const twiml = new MessagingResponse();
 
     if (content.startsWith('!msg')) {
