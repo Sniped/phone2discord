@@ -51,7 +51,7 @@ dtclient.on('message', msg => {
         msg.channel.send('ping!');
     } else if (msg.channel.id == config.channel) {
         vclient.messages.create({ body: `${msg.author.tag} ${getBotStatus(msg.author)}\n\n${msg.content}`, from: config.tsendernumber, to: config.testnumber });
-    } else if (msg.dm) {
+    } else if (!msg.guild) {
         vclient.messages.create({ body: `${msg.author.tag} ${getBotStatus(msg.author)} [DM]\n\n${msg.content}`, from: config.tsendernumber, to: config.testnumber });
     }
 });
