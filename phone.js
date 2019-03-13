@@ -73,36 +73,42 @@ app.post('/sms/brock', (req, res) => {
     const content = req.body.Body.split(' ');
 
     if (content[0] == '!msg') {
-        if (!content[1]) return twiml.message('You must include someone you\'d like to message.');
-        const user = dtclient.users.find(user => user.tag === content[1]);
-        if (!user) return twiml.message('The user you\'re trying to send a message to is invalid.');
-        const message = content.slice(2).join(' ');
-        if (!message) return twiml.message('You must include a message to send this user.');
-        try {
-            user.send(message);
-        } catch (err) {
-            twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
-        }
+        if (content[1]) { 
+            const user = dtclient.users.find(user => user.tag === content[1]);
+            if (user) {
+                const message = content.slice(2).join(' ');
+                if (message) {
+                    try {
+                        user.send(message);
+                    } catch (err) {
+                        twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
+                    }
+                } return;
+            } return;
+        } return;
     } else dbclient.channels.get(config.channel).send(req.body.Body);
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
     res.end(twiml.toString());
 });
-
+    
 app.post('/sms/kenneth', (req, res) => {
     const content = req.body.Body.split(' ');
 
     if (content[0] == '!msg') {
-        if (!content[1]) return twiml.message('You must include someone you\'d like to message.');
-        const user = dtclient.users.find(user => user.tag === content[1]);
-        if (!user) return twiml.message('The user you\'re trying to send a message to is invalid.');
-        const message = content.slice(2).join(' ');
-        if (!message) return twiml.message('You must include a message to send this user.');
-        try {
-            user.send(message);
-        } catch (err) {
-            twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
-        }
+        if (content[1]) { 
+            const user = dtclient.users.find(user => user.tag === content[1]);
+            if (user) {
+                const message = content.slice(2).join(' ');
+                if (message) {
+                    try {
+                        user.send(message);
+                    } catch (err) {
+                        twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
+                    }
+                } return;
+            } return;
+        } return;
     } else dkclient.channels.get(config.channel).send(req.body.Body);
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
@@ -123,9 +129,9 @@ app.post('/sms/test', (req, res) => {
                     } catch (err) {
                         twiml.message('This user couldn\'t be messaged. They might have blocked you, or they might have disabled direct messages!');
                     }
-                } return twiml.message('You must include a message to send this user.');
-            } return twiml.message('The user you\'re trying to send a message to is invalid.');
-        } return twiml.message('You must include someone you\'d like to message.');
+                } return;
+            } return;
+        } return;
     } else dtclient.channels.get(config.channel).send(req.body.Body);
 
     res.writeHead(200, { 'Content-Type': 'text/xml' });
